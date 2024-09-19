@@ -5,6 +5,7 @@ import com.example.java.serializable.constant.SerializationTypeEnum;
 import com.example.java.serializable.deserialization.DeserializationContext;
 import com.example.java.serializable.deserialization.DeserializationStrategy;
 import com.example.java.serializable.po.Person;
+import com.example.java.serializable.po.Person1;
 import com.example.java.serializable.serialization.SerializationContext;
 import com.example.java.serializable.serialization.SerializationStrategy;
 
@@ -25,6 +26,7 @@ public class Main {
             System.out.println(deserializedPerson);
         } catch (Exception e) {
             System.out.println("failed");
+            e.printStackTrace();
         }
     }
 
