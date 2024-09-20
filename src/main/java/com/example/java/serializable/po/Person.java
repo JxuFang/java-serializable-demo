@@ -11,8 +11,12 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class Person implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private String name;
 
     private int age;
 
+//    increase a field
+//    private float weight;
 }
