@@ -4,6 +4,7 @@ import com.example.java.serializable.constant.DeserializationTypeEnum;
 import com.example.java.serializable.constant.SerializationTypeEnum;
 import com.example.java.serializable.deserialization.DeserializationContext;
 import com.example.java.serializable.deserialization.DeserializationStrategy;
+import com.example.java.serializable.po.Employee;
 import com.example.java.serializable.po.One;
 import com.example.java.serializable.po.Person;
 import com.example.java.serializable.serialization.SerializationContext;
@@ -17,11 +18,6 @@ import java.io.InvalidClassException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-/**
- * @Author: Fang Jinxu
- * @Description:
- * @Date: 2024-09-18 20:42
- */
 class BaseTest {
 
     private static SerializationStrategy serializationStrategy;
@@ -47,14 +43,14 @@ class BaseTest {
     void testDiffSerialVersion_InvalidClass() throws IOException {
         // test after modifying serialVersionUID of Person class
         byte[] personBytes = Files.readAllBytes(Paths.get("src/test/resources/person.txt"));
-        Assertions.assertThrows(InvalidClassException.class, () -> deserializationStrategy.deserialize(personBytes));
+        Assertions.assertThrows(InvalidClassException.class, () -> deserializationStrategy.deserialize(personBytes, Person.class));
     }
 
     @Test
     void testIncreaseField() throws IOException, ClassNotFoundException {
         // test after increasing a field of Person class
         byte[] personBytes = Files.readAllBytes(Paths.get("src/test/resources/person.txt"));
-        Person deserializedPerson = (Person) deserializationStrategy.deserialize(personBytes);
+        Person deserializedPerson = deserializationStrategy.deserialize(personBytes, Person.class);
 //        Assertions.assertEquals(new Person("test", 10, 0.0f), deserializedPerson);
     }
 
@@ -71,7 +67,21 @@ class BaseTest {
         // test after modifying serialVersionUID of One class
         byte[] oneBytes = Files.readAllBytes(Paths.get("src/test/resources/one.txt"));
         // nothing was thrown, the reason is that serialVersionUID wasn't changed. so serialVersionUID I defined is invalid
-        Assertions.assertThrows(InvalidClassException.class, () -> deserializationStrategy.deserialize(oneBytes));
+        Assertions.assertThrows(InvalidClassException.class, () -> deserializationStrategy.deserialize(oneBytes, One.class));
+    }
+
+    @Test
+    void testTransient() throws IOException, ClassNotFoundException {
+        Employee employee = new Employee();
+        employee.setName("tom");
+        employee.setId("001");
+        employee.setIncome(10000.0f);
+        byte[] serializedEmployee = serializationStrategy.serialize(employee);
+
+        Employee expected = new Employee();
+        expected.setName("tom");
+        expected.setId("001");
+        Assertions.assertEquals(expected, deserializationStrategy.deserialize(serializedEmployee, Employee.class));
     }
 
 }

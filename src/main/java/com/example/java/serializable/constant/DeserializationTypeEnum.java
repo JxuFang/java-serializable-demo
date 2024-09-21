@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum DeserializationTypeEnum {
     JAVA(0),
 
-    PROTO_BUFFER(1)
+    KRYO(1)
     ;
 
     private final int type;

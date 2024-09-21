@@ -4,5 +4,5 @@ import java.io.IOException;
 
 public interface DeserializationStrategy {
 
-    Object deserialize(byte[] bytes) throws IOException, ClassNotFoundException;
+    <T> T deserialize(byte[] bytes, Class<T> clazz) throws IOException, ClassNotFoundException;
 }

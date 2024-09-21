@@ -8,10 +8,11 @@ import java.io.ObjectInputStream;
 
 public class JavaDeserialize implements DeserializationStrategy {
 
+
     @Override
-    public Object deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
+    public <T> T deserialize(byte[] bytes, Class<T> clazz) throws IOException, ClassNotFoundException {
         try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
-            return ois.readObject();
+            return (T) ois.readObject();
         }
     }
 }
