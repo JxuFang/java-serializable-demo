@@ -8,10 +8,11 @@ import java.io.IOException;
 
 public class KryoDeserialize implements DeserializationStrategy {
 
+    private final ThreadLocal<Kryo> kryoThreadLocal = ThreadLocal.withInitial(() -> new Kryo());
 
     @Override
     public <T> T deserialize(byte[] bytes, Class<T> clazz) throws IOException, ClassNotFoundException {
-        Kryo kryo = new Kryo();
+        Kryo kryo = kryoThreadLocal.get();
         kryo.register(clazz);
         try (Input input = new Input(bytes)) {
             return kryo.readObject(input, clazz);
